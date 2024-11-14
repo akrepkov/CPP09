@@ -5,8 +5,6 @@
 #include <sstream>
 
 
-
-
 bool isIntegerString(const std::string& str) {
     for (size_t i = 0; i < str.length(); ++i) {
         if (!std::isdigit(str[i])) {
@@ -47,4 +45,15 @@ Deque:
 A std::deque (double-ended queue) is not contiguous in memory. Instead, it’s implemented as a series of chunks (blocks of memory) or arrays, each pointing to another.
 Insertions and deletions are O(1) at both the front and the back. Inserting at the middle is O(n), similar to std::vector.
 
+*/
+
+/*
+<p>Now you have to check this operation by using the following command as an <br>
+argument to the program:</p>
+
+`shuf -i 1-1000 -n 3000 | tr "\n" " " `
+
+
+<p>If the command works correctly, the person being evaluated should be able to <br>
+explain the difference in time used for each container selected.</p>
 */

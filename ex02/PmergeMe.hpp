@@ -8,6 +8,7 @@ class PmergeMe {
         std::vector<int> Vector;
         std::deque<int> Deque;
     public:
+		bool odd = false;
         PmergeMe() = default;
         ~PmergeMe() = default;
         PmergeMe(const PmergeMe& copy);
@@ -18,7 +19,7 @@ class PmergeMe {
         void addToDeque(int num){Deque.push_back(num);}
         void sortDeque();
         void sortVector();
-
+		std::vector<int> mergeInsertionVector(std::vector<int> big);
 
 
 
