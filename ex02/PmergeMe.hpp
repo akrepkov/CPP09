@@ -19,8 +19,8 @@ class PmergeMe {
         void addToDeque(int num){Deque.push_back(num);}
         void sortDeque();
         void sortVector();
-		std::vector<int> mergeInsertionVector(std::vector<int> big);
-
+		std::vector<int> mergeInsertionVector(std::vector<int>& big);
+		void alghorithm(std::vector<int>& main, std::vector<int> small);
 
 
         void printDeque();

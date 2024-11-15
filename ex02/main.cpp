@@ -13,6 +13,14 @@ bool isIntegerString(const std::string& str) {
     }
     return true;
 }
+
+
+/*
+check for doubles
+Check for empty str
+1 number
+2 numbers str
+*/
 int main(int argc, char **argv){
     if (argc == 2){
        PmergeMe VectorSort;
@@ -56,4 +64,8 @@ argument to the program:</p>
 
 <p>If the command works correctly, the person being evaluated should be able to <br>
 explain the difference in time used for each container selected.</p>
+*/
+
+/*
+
 */
