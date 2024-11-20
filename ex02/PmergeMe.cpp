@@ -96,7 +96,11 @@ std::vector<int> PmergeMe::mergeInsertionVector(std::vector<int>& big){
 	}
 	return big;
 }
+/*
 
+	change to jacobsthal numbers
+
+*/
 void PmergeMe::alghorithm(std::vector<int>& main, std::vector<int> small){
 	findInsertPos(main, small[0], 0, 0);
     if (small.size() == 2) {
