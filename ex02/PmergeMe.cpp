@@ -4,6 +4,12 @@
 #include <iostream>
 #include <algorithm>
 
+void	PmergeMe::printVector(std::vector<int> vec) {
+	for (int nbr : vec) {
+		std::cout << " " << nbr << " ";
+	}
+	std::cout << std::endl;
+}
 
 PmergeMe::PmergeMe(const PmergeMe& copy){
 	this->Vector = copy.Vector;
@@ -33,7 +39,7 @@ void PmergeMe::printDeque(){
 	std::cout << std::endl;
 }
 /* Need to avoid iterator invalidation*/
-void findInsertPos(std::vector<int>& temp, int x, int size, int arr){
+bool findInsertPos(std::vector<int>& temp, int x, int size, int arr){
 	// std::cout << " temp[size-1] " << temp[size-1] << std:: endl;
 	// std::cout << "temp" << std::endl;
 	// for(auto i= temp.begin(); i != temp.end(); ++i){
@@ -43,28 +49,30 @@ void findInsertPos(std::vector<int>& temp, int x, int size, int arr){
 	// std::cout << "check " << x << " " << temp[0] << " ";
 	if (x < temp[0]){
 		temp.insert(temp.begin(), x);}
-	else if (x > temp[size-1])
+	else if (x > temp[size]){
 		temp.insert(temp.begin()+size, x);
+		return 1;
+	}
 	else{
 		int low = 0;
-		int high = size - 1;
-		std::cout << " FOR findInsertPos " << low << " " << high << " " << x << std:: endl;
+		int high = size;
+		//std::cout << " FOR findInsertPos " << low << " " << high << " " << x << std:: endl;
 		while (high > low){
 			mid = low + (high - low)/2;
 			if (x < temp[mid])
-				high = mid;
+				high = mid - 1;
 			 else
 				low = mid + 1;
 			
 			// std::cout << "Loop " << x  << std:: endl;
 		}
-		temp.insert(temp.begin() + mid, x);
+		temp.insert(temp.begin() + low, x);
 
-	}	
+	}
 	if (arr == 1){
 		temp.erase(temp.begin()+size);
-		temp.reserve(1); //do I need it?
 	}
+	return 0;
 }
 
 std::vector<int> PmergeMe::mergeInsertionVector(std::vector<int>& big){
@@ -94,20 +102,23 @@ void PmergeMe::alghorithm(std::vector<int>& main, std::vector<int> small){
     if (small.size() == 2) {
         findInsertPos(main, small[1], 1, 0);  // Ido i need it?
     }
-	for (size_t i = 2, iter = 2; i < small.size(); i+=2, iter++){
+	printVector(main);
+	int size = 3;
+	for (size_t i = 2; i < small.size(); i+=2){
+		//size++;
 		// if (odd == true){
 		// 	if (iter == (main.size() / 2) - 2){
 		// 		findInsertPos(main, main.back(), i, 0);
 		// 		continue;
 		// 	}
 		// }
-		//std::cout << " FOR Loop " << i  << std:: endl;
-		if (iter % 2 == 0)
-			findInsertPos(main, small[i], i, 0);
+		if (findInsertPos(main, small[i], size, 0) == true)
+			findInsertPos(main, small[i-1], size, 0);
 		else
-			{
-				std::cout << "checking " << small[i-1] << std::endl;
-				findInsertPos(main, small[i-1], i-1, 0);}
+			findInsertPos(main, small[i-1], size-1, 0);
+		size+=4;
+		printVector(main);
+		std::cout << " FOR Loop " << size << " " << small[i] << " " << main[size] << " main size " << main.size()  << std:: endl;
 	}
 }
 
@@ -130,8 +141,9 @@ void PmergeMe::sortVector()
 	for (size_t i = 1; i < Vector.size(); i+=2){
 		small.push_back(Vector[i]);
 	}
-	if (big.size() > 1)
-		big = mergeInsertionVector(big);
+	// if (big.size() > 1)
+	// 	big = mergeInsertionVector(big);
+	std::sort(big.begin(), big.end());
 	if (Vector.size() %2 != 0){
 		odd = true;
 		big.push_back(Vector.back());
