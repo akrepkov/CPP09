@@ -20,7 +20,8 @@ class PmergeMe {
         void sortDeque();
         void sortVector();
 		std::vector<int> mergeInsertionVector(std::vector<int>& big);
-		void alghorithm(std::vector<int>& main, std::vector<int> small);
+		std::vector<int> alghorithm(std::vector<int>& main);
+        std::vector<int> alghorithmSmall(std::vector<int>& main, std::vector<int>& small);
 		void printVector(std::vector<int> vec);
 
 

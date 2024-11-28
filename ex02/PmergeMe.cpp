@@ -38,101 +38,113 @@ void PmergeMe::printDeque(){
 	}
 	std::cout << std::endl;
 }
-/* Need to avoid iterator invalidation*/
-bool findInsertPos(std::vector<int>& temp, int x, int size, int arr){
-	// std::cout << " temp[size-1] " << temp[size-1] << std:: endl;
-	// std::cout << "temp" << std::endl;
-	// for(auto i= temp.begin(); i != temp.end(); ++i){
-	// 	std::cout << " " << *i << " ";
-	// }
+bool insertNumber(std::vector<int>& temp, int x, int size) {
+	temp.erase(temp.begin() + size);
+	int low = 0;
+	int high = size - 1;
 	int mid;
-	// std::cout << "check " << x << " " << temp[0] << " ";
-	if (x < temp[0]){
-		temp.insert(temp.begin(), x);}
-	else if (x > temp[size]){
-		temp.insert(temp.begin()+size, x);
-		return 1;
+	if (x < temp[0]) {
+		temp.insert(temp.begin(), x);
 	}
-	else{
-		int low = 0;
-		int high = size;
-		//std::cout << " FOR findInsertPos " << low << " " << high << " " << x << std:: endl;
-		while (high > low){
-			mid = low + (high - low)/2;
+	else if (x > temp[size]) {
+		temp.insert(temp.begin() + size, x);
+		return true;
+	} else {
+		while (low <= high) { 
+			mid = low + (high - low) / 2;
 			if (x < temp[mid])
 				high = mid - 1;
-			 else
+			else
 				low = mid + 1;
-			
-			// std::cout << "Loop " << x  << std:: endl;
 		}
 		temp.insert(temp.begin() + low, x);
+	}
+	// for(auto m= temp.begin(); m < (temp.begin() + size + 1); ++m){
+	// 		std::cout << " loop  " << *m << " ";
+	// 	}
+	// 	std::cout << "\n";
+	return false;
 
-	}
-	if (arr == 1){
-		temp.erase(temp.begin()+size);
-	}
-	return 0;
 }
 
-std::vector<int> PmergeMe::mergeInsertionVector(std::vector<int>& big){
-	
-	if (big.size() == 2){
-		if (Vector[0] > Vector[1])
-			std::swap(Vector[0], Vector[1]);
+bool insertNumberS(std::vector<int>& temp, int x, int size) {
+	int low = 0;
+	int high = size - 1;
+	int mid;
+	if (x < temp[0]) {
+		temp.insert(temp.begin(), x);
 	}
-	else{
-		for (size_t i = 2, iter = 0; i < big.size(); i+=2, iter++){
-			// std::cout << " FOR Loop " << i  << std:: endl;
-			if (iter % 2 == 0){
-				findInsertPos(big, big[i], i, 1);
-				// big.erase(big.begin()+i);
-			}
-			else {
-				findInsertPos(big, big[i-1], i-1, 1);
-				// big.erase(big.begin()+i - 1);
-			}
+	else if (x > temp[size]) {
+		temp.insert(temp.begin() + size, x);
+		return true;
+	} else {
+		while (low <= high) { 
+			mid = low + (high - low) / 2;
+			if (x < temp[mid])
+				high = mid - 1;
+			else
+				low = mid + 1;
 		}
+		temp.insert(temp.begin() + low, x);
 	}
-	return big;
+	// for(auto m= temp.begin(); m < (temp.begin() + size + 1); ++m){
+	// 		std::cout << " loop  " << *m << " ";
+	// 	}
+	// 	std::cout << "\n";
+	return false;
+
 }
-/*
-
-	change to jacobsthal numbers
-
-*/
-void PmergeMe::alghorithm(std::vector<int>& main, std::vector<int> small){
-	findInsertPos(main, small[0], 0, 0);
-    if (small.size() == 2) {
-        findInsertPos(main, small[1], 1, 0);  // Ido i need it?
-    }
-	printVector(main);
-	int size = 3;
-	for (size_t i = 2; i < small.size(); i+=2){
-		//size++;
-		// if (odd == true){
-		// 	if (iter == (main.size() / 2) - 2){
-		// 		findInsertPos(main, main.back(), i, 0);
-		// 		continue;
-		// 	}
-		// }
-		if (findInsertPos(main, small[i], size, 0) == true)
-			findInsertPos(main, small[i-1], size, 0);
-		else
-			findInsertPos(main, small[i-1], size-1, 0);
-		size+=4;
-		printVector(main);
-		std::cout << " FOR Loop " << size << " " << small[i] << " " << main[size] << " main size " << main.size()  << std:: endl;
+std::vector<int> PmergeMe::alghorithm(std::vector<int>& main) {
+	std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
+	size_t j = 0;
+	while (j < jacobsthal.size()) {
+		size_t start = (static_cast<size_t>(jacobsthal[j]) < (main.size() - 1)) ? jacobsthal[j] : (main.size() - 1);
+		size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
+		std::cout << "Start: " << start << ", End: " << end << std::endl;
+		while (start > end) {
+			std::cout << " insert " << main[start] << "\n";
+			insertNumber(main, main[start], start);
+			start--;
+		}
+		if (start >= main.size() - 1) break;
+		j++;
 	}
+	for(auto m= main.begin(); m != main.end(); ++m){
+		std::cout << " main  " << *m << " ";
+	}
+	std::cout << "\n";
+	return main;
 }
-
+std::vector<int> PmergeMe::alghorithmSmall(std::vector<int>& main, std::vector<int>& small) {
+	std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
+	insertNumber(main, small[0], 1);
+	size_t j = 0;
+	while (j < jacobsthal.size()) {
+		size_t start = (static_cast<size_t>(jacobsthal[j]) < (small.size() - 1)) ? jacobsthal[j] : (small.size() - 1);
+		size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
+		std::cout << "Start: " << start << ", End: " << end << std::endl;
+		int i = start;
+		while (start > end) {
+			std::cout << " insert " << small[start] << "\n";
+			insertNumberS(main, small[start], i);
+			start--;
+		}
+		if (start >= small.size() - 1) break;
+		j++;
+	}
+	for(auto m= main.begin(); m != main.end(); ++m){
+		std::cout << " main  " << *m << " ";
+	}
+	std::cout << "\n";
+	return main;
+}
 
 void PmergeMe::sortVector()
 {
 	std::vector<int> big;
 	std::vector<int> small;
 
-	printVector();
+	
 	if (Vector.size() == 0)
 		std::cout << "Error";
 	for (size_t i = 0; i+1 < Vector.size(); i+=2){
@@ -145,26 +157,32 @@ void PmergeMe::sortVector()
 	for (size_t i = 1; i < Vector.size(); i+=2){
 		small.push_back(Vector[i]);
 	}
-	// if (big.size() > 1)
-	// 	big = mergeInsertionVector(big);
-	std::sort(big.begin(), big.end());
+	// for(auto i= big.begin(); i != big.end(); ++i){
+	// 	std::cout  << *i << " ";
+	// }
 	if (Vector.size() %2 != 0){
 		odd = true;
 		big.push_back(Vector.back());
-	}
+	}  
+	if (big.size() > 1)
+		big = alghorithm(big);
+	alghorithmSmall(big, small);
+	// std::sort(big.begin(), big.end());
 	for(auto i= big.begin(); i != big.end(); ++i){
 		std::cout << " BIG  " << *i << " ";
 	}
 	std::cout << "\n";
-	for(auto i= small.begin(); i != small.end(); ++i){
-		std::cout << " SMALL  " << *i << " ";
-	}
-	std::cout << "\n\n";
-	std::cout << std::endl;
-	alghorithm(big, small);
-	for(auto i= big.begin(); i != big.end(); ++i){
-		std::cout << " BIG  " << *i << " ";
-	}
+	// for(auto i= small.begin(); i != small.end(); ++i){
+	// 	std::cout << " SMALL  " << *i << " ";
+	// }
+	std::cout << "\n";
+	// alghorithmSmall(big, small);
+
+	
+	// std::cout << "\n";
+	// std::cout << "\n\n";
+	// std::cout << std::endl;
+	// alghorithm(big, small);
 }
 
 void PmergeMe::sortDeque()
