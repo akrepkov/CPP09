@@ -55,17 +55,17 @@ int insertNumber(std::vector<int>& temp, int x, int size, int num) {
 std::vector<int> alghorithm(std::vector<int>& main, std::vector<int>& small) {
     std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
     size_t j = 0;
-    for (auto m = main.begin(); m != main.end(); ++m) {
-        std::cout << *m << " ";
-    }
-    std::cout << "\n";
+    // for (auto m = main.begin(); m != main.end(); ++m) {
+    //     std::cout << *m << " ";
+    // }
+    // std::cout << "\n";
     while (j < jacobsthal.size()) {
         // Ensure start does not go out of bounds
         size_t start = (jacobsthal[j] < main.size()) ? jacobsthal[j] : main.size() - 1;
         size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
 
+        std::cout << "Start: " << start << ", End: " << end << std::endl;
         if (start > main.size() - 1 || end > start) break;
-        // std::cout << "Start: " << start << ", End: " << end << std::endl;
 		int temp = start;
         while (start > end) {
             // std::cout << " insert " << main[temp] << "\n";
@@ -116,10 +116,10 @@ std::vector<int> insertSmall(std::vector<int>& temp, int x, int size) {
         }
         temp.insert(temp.begin() + low, x); // Insert at the correct position
     }
-		for (auto m = temp.begin(); m != temp.begin() + size + 1; ++m) {
-			std::cout << " main  " << *m << " ";
-		}
-		std::cout << "\n";
+		// for (auto m = temp.begin(); m != temp.begin() + size + 1; ++m) {
+		// 	std::cout << " main  " << *m << " ";
+		// }
+		// std::cout << "\n";
     return temp;
 }
 
@@ -127,21 +127,21 @@ std::vector<int> algthjorithmforsmallpart(std::vector<int>& main, std::vector<in
 	std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
 	main.insert(main.begin(), small[0]);
     size_t j = 0;
-	std::cout << "SMALL ";
-    for (auto m = small.begin(); m != small.end(); ++m) {
-        std::cout << *m << " ";
-    }
-    std::cout << "\n";
+	// std::cout << "SMALL ";
+    // for (auto m = small.begin(); m != small.end(); ++m) {
+    //     std::cout << *m << " ";
+    // }
+    // std::cout << "\n";
 	while (j < jacobsthal.size()) {
         // Ensure start does not go out of bounds
         size_t start = (jacobsthal[j] < small.size()) ? jacobsthal[j] : small.size() - 1;
         size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
         if (start > main.size() - 1 || end >= start) break;
-        std::cout << "Start: " << start << ", End: " << end << std::endl;
+        // std::cout << "Start: " << start << ", End: " << end << std::endl;
 		int temp = start - end;
         while (temp != 0) {
 			end +=2;
-            std::cout << " insert " << small[start] << "\n";
+             std::cout << " insert " << small[start] << "\n";
             main = insertSmall(main, small[start], main.size() - 1);
 			start--;
             temp--;
@@ -152,8 +152,10 @@ std::vector<int> algthjorithmforsmallpart(std::vector<int>& main, std::vector<in
 }
 
 int main(int argc, char **argv) {
+
+	/*ADD PROTECTION FOR 1-2 numbers*/
     if (argc < 2) {
-        std::cerr << "Error: No input provided.\n";
+        std::cerr << "Error: Incorrect input.\n";
         return 1;
     }
 
@@ -163,10 +165,11 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         try {
             int num = std::stoi(argv[i]);
+			std::cout << num << "  VECTOR[i]";
             Vector.push_back(num);
         }
         catch (const std::exception& e) {
-            std::cerr << "Error: Invalid input '" << argv[i] << "'\n";
+            std::cout << "Error: Invalid input '" << argv[i] << "'\n";
             return 1;
         }
     }
@@ -183,20 +186,21 @@ int main(int argc, char **argv) {
     // Split into big and small vectors
     for (size_t i = 0; i + 1 < Vector.size(); i += 2) {
         big.push_back(Vector[i]);
+		// std::cout << Vector[i] << "  VECTOR[i]";
     }
     for (size_t i = 1; i < Vector.size(); i += 2) {
         small.push_back(Vector[i]);
     }
+	std::cout << "CHECK"<<  "\n";
 
     // Apply the algorithm to the 'big' vector
-    big = alghorithm(big, small);
-	
-	big = algthjorithmforsmallpart(big, small);
-    std::cout << " result: \n";
-    for (auto i = big.begin(); i != big.end(); ++i) {
-        std::cout << *i << " ";
-    }
-    std::cout << "\n";
+    // big = alghorithm(big, small);
+	// big = algthjorithmforsmallpart(big, small);
+    // std::cout << " result: \n";
+    // for (auto i = big.begin(); i != big.end(); ++i) {
+    //     std::cout << *i << " ";
+    // }
+    // std::cout << "\n";
 	std::cout  << std::boolalpha << isAscending(big) << std::endl;
     return 0;
 }
