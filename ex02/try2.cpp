@@ -1,151 +1,130 @@
-#include "PmergeMe.hpp"
 #include <vector>
-#include <deque>
 #include <iostream>
 #include <algorithm>
 
-void	PmergeMe::printVector(std::vector<int> vec) {
-	for (int nbr : vec) {
-		std::cout << " " << nbr << " ";
-	}
-	std::cout << std::endl;
+bool isAscending(const std::vector<int>& numbers) {
+    for (size_t i = 1; i < numbers.size(); ++i) {
+        if (numbers[i] <= numbers[i - 1]) {
+            std::cout << "Numbers not in ascending order at index " << i << ": " 
+                      << numbers[i - 1] << " >= " << numbers[i] << std::endl;
+            return false;
+        }
+    }
+    return true;
 }
 
-PmergeMe::PmergeMe(const PmergeMe& copy){
-	this->Vector = copy.Vector;
-	this->Deque = copy.Deque;
-}
-PmergeMe& PmergeMe::operator=(const PmergeMe& copy){
-	if (this != &copy){
-		this->Vector = copy.Vector;
-		this->Deque = copy.Deque;		
-	}
-	return *this;
-}
 
-void PmergeMe::printVector(){
-	std::cout << "Input " << std::endl;
-	for(auto i= Vector.begin(); i != Vector.end(); ++i){
-		std::cout << *i << " ";
-	}
-	std::cout << std::endl;
-}
+std::vector<int> insertNumber(std::vector<int>& temp, int x, int size, int num) {
+    // if (size > temp.size()) {
+    //     std::cerr << "Error: Invalid size for erase operation.\n";
+    //     return temp;
+    // }
 
-void PmergeMe::printDeque(){
-	std::cout << "Deque" << std::endl;
-	for(auto i= Deque.begin(); i != Deque.end(); ++i){
-		std::cout << " " << *i << " ";
-	}
-	std::cout << std::endl;
-}
+    temp.erase(temp.begin() + num); // Remove the element at index 'size'
 
-bool findInsertPos(std::vector<int>& temp, int x, int size, int arr){
-	int mid;
-	if (x < temp[0]){
-		temp.insert(temp.begin(), x);}
-	else if (x > temp[size]){
-		temp.insert(temp.begin()+size, x);
-		return 1;
-	}
-	else{
-		int low = 0;
-		int high = size;
-		while (high >= low){
-			mid = low + (high - low)/2;
-			if (x <= temp[mid])
-				high = mid - 1;
-			 else
-				low = mid + 1;
+    int low = 0;
+    int high = size;
+    int mid;
+
+    if (x < temp[0]) {
+        temp.insert(temp.begin(), x); // Insert at the beginning
+    }
+    else if (x > temp[size]) {
+		std::cout << "Should add at the end"<< std::endl;
+        temp.insert(temp.begin() + size + 1, x); // Insert at the end
+		for (auto m = temp.begin(); m != temp.begin() + size; ++m) {
+			std::cout << " main  " << *m << " ";
 		}
-		temp.insert(temp.begin() + low, x);
-
-	}
-	if (arr == 1){
-		temp.erase(temp.begin()+size);
-	}
-	return 0;
+		std::cout << "\n";
+    }
+    else {
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+            if (x < temp[mid])
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+        temp.insert(temp.begin() + low, x); // Insert at the correct position
+    }
+    return temp;
 }
 
-int binarySearch(std::vector<int>& arr, int key, int low, int high) {
-	while (low < high) {
-		int mid = low + (high - low) / 2;
-		if (arr[mid] < key)
-			low = mid + 1;
-		else
-			high = mid;
-	}
-	return low;
+std::vector<int> alghorithm(std::vector<int>& main) {
+    std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
+    size_t j = 0;
+    for (auto m = main.begin(); m != main.end(); ++m) {
+        std::cout << *m << " ";
+    }
+    std::cout << "\n";
+    while (j < jacobsthal.size()) {
+        // Ensure start does not go out of bounds
+        size_t start = (jacobsthal[j] < main.size()) ? jacobsthal[j] : main.size() - 1;
+        size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
+
+        if (start > main.size() - 1 || end > start) break;
+        std::cout << "Start: " << start << ", End: " << end << std::endl;
+		int temp = start;
+        while (start > end) {
+            std::cout << " insert " << main[temp] << "\n";
+            main = insertNumber(main, main[temp], end, temp);
+            end++;
+        }
+        j++;
+    }
+
+    for (auto m = main.begin(); m != main.end(); ++m) {
+        std::cout << " main  " << *m << " ";
+    }
+    std::cout << "\n";
+    return main;
 }
 
-void PmergeMe::insertionSortVector(std::vector<int>& main){
-	for (size_t i = 1; i < main.size(); ++i) {
-		int key = main[i];
-		int insertPos = binarySearch(main, key, 0, i);
-		for (int j = i; j > insertPos; --j) {
-			main[j] = main[j - 1];
-		}
-		main[insertPos] = key;
-	}
-}
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << "Error: No input provided.\n";
+        return 1;
+    }
 
-void insertionSmallVector(std::vector<int>& main, int i) {
-	auto pos = binarySearch(main, i, 0, main.size());
-	main.insert(main.begin() + pos, i);
-	for(int h = 0; main[h]; h++)
-		std::cout << " " << main[h] << " ";
-	std::cout << "\n";
-}
+    std::vector<int> Vector;
 
-void PmergeMe::alghorithm(std::vector<int>& main, std::vector<int> small){
-	std::vector<int> jacobsthal = {0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
-	int jIndex = 1;
-	int j = 0;
-	insertionSmallVector(main, small[0]); 
-	while(static_cast<size_t>(jacobsthal[jIndex]) <= small.size()){
-		j = std::min(static_cast<size_t>(jacobsthal[jIndex]), small.size());
-		std::cout << "J " << j << std::endl;
-		for (int i = j; i > jacobsthal[jIndex-1]; i--){
-		
-			std::cout << "small[i] " << small[i] << std::endl;
-			insertionSmallVector(main, small[i]); 
-		}
-		jIndex++;
-	}
+    // Convert command-line arguments to integers
+    for (int i = 1; i < argc; i++) {
+        try {
+            int num = std::stoi(argv[i]);
+            Vector.push_back(num);
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Error: Invalid input '" << argv[i] << "'\n";
+            return 1;
+        }
+    }
 
-}
-void PmergeMe::sortVector()
-{
-	std::vector<int> big;
-	std::vector<int> small;
+    std::vector<int> big;
+    std::vector<int> small;
 
-	printVector();
-	if (Vector.size() < 2){
-		if (Vector.size() < 1) std::cerr << "The input is empty" << std::endl;
-		else std::cout << "Result: "<< Vector[0] << std::endl;
-		return ;
-	}
-	for (size_t i = 0; i < Vector.size(); i+=2){
-		if (Vector[i] < Vector[i+1])
-			std::swap(Vector[i], Vector[i+1]);
-	}
-	for (size_t i = 0; i < Vector.size(); i+=2){
-		big.push_back(Vector[i]);
-	}
-	for (size_t i = 1; i < Vector.size(); i+=2){
-		small.push_back(Vector[i]);
-	}
-	insertionSortVector(big);
-	alghorithm(big, small);
-	std::cout << "Result: ";
-	for(auto i= big.begin(); i != big.end(); ++i){
-		std::cout << *i << " ";
-	}
-	std::cout << std::endl;
-}
+    // Swap adjacent elements in pairs
+    for (size_t i = 0; i + 1 < Vector.size(); i += 2) {
+        if (Vector[i] < Vector[i + 1])
+            std::swap(Vector[i], Vector[i + 1]);
+    }
 
-void PmergeMe::sortDeque()
-{
-	// printDeque();
+    // Split into big and small vectors
+    for (size_t i = 0; i + 1 < Vector.size(); i += 2) {
+        big.push_back(Vector[i]);
+    }
+    for (size_t i = 1; i < Vector.size(); i += 2) {
+        small.push_back(Vector[i]);
+    }
 
-	
+    // Apply the algorithm to the 'big' vector
+    big = alghorithm(big);
+
+    std::cout << " result: \n";
+    for (auto i = big.begin(); i != big.end(); ++i) {
+        std::cout << *i << " ";
+    }
+    std::cout << "\n";
+	std::cout  << std::boolalpha << isAscending(big) << std::endl;
+    return 0;
 }

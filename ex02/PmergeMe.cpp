@@ -39,32 +39,48 @@ void PmergeMe::printDeque(){
 	std::cout << std::endl;
 }
 bool insertNumber(std::vector<int>& temp, int x, int size) {
-	temp.erase(temp.begin() + size);
-	int low = 0;
-	int high = size - 1;
-	int mid;
-	if (x < temp[0]) {
-		temp.insert(temp.begin(), x);
-	}
-	else if (x > temp[size]) {
-		temp.insert(temp.begin() + size, x);
-		return true;
-	} else {
-		while (low <= high) { 
-			mid = low + (high - low) / 2;
-			if (x < temp[mid])
-				high = mid - 1;
-			else
-				low = mid + 1;
-		}
-		temp.insert(temp.begin() + low, x);
-	}
-	// for(auto m= temp.begin(); m < (temp.begin() + size + 1); ++m){
-	// 		std::cout << " loop  " << *m << " ";
-	// 	}
-	// 	std::cout << "\n";
-	return false;
+    // Ensure the size is within bounds before attempting to erase
+    // if ((size_t)size >= temp.size()) {
+    //     return false;  // Prevent out-of-bounds access
+    // }
 
+    // Erase the element at 'size' (assumed to be a placeholder)
+    temp.erase(temp.begin() + size);
+
+    int low = 0;
+    int high = size - 1;
+    int mid;
+
+    // Insert 'x' at the beginning if it's smaller than the first element
+    if (x < temp[0]) {
+        temp.insert(temp.begin(), x);
+    }
+    // Insert 'x' at the end of the sorted section if it's greater than the last element
+    else if (x > temp[size - 1]) {  // Change temp[size] to temp[size - 1]
+        temp.insert(temp.begin() + size, x);  // Insert at the new end of the sorted section
+        return true;
+    } 
+    // Binary search to find the correct position for 'x'
+    else {
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+            if (x < temp[mid]) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        // Insert 'x' at the correct position found by binary search
+        temp.insert(temp.begin() + low, x);
+    }
+
+    // Optional debug print (can be uncommented for debugging purposes)
+    // for (auto m = temp.begin(); m < (temp.begin() + size + 1); ++m) {
+    //     std::cout << " loop  " << *m << " ";
+    // }
+    // std::cout << "\n";
+
+    return false;
 }
 
 bool insertNumberS(std::vector<int>& temp, int x, int size) {
@@ -132,10 +148,10 @@ std::vector<int> PmergeMe::alghorithmSmall(std::vector<int>& main, std::vector<i
 		if (start >= small.size() - 1) break;
 		j++;
 	}
-	for(auto m= main.begin(); m != main.end(); ++m){
-		std::cout << " main  " << *m << " ";
-	}
-	std::cout << "\n";
+	// for(auto m= main.begin(); m != main.end(); ++m){
+	// 	std::cout << " main  " << *m << " ";
+	// }
+	// std::cout << "\n";
 	return main;
 }
 
@@ -160,16 +176,17 @@ void PmergeMe::sortVector()
 	// for(auto i= big.begin(); i != big.end(); ++i){
 	// 	std::cout  << *i << " ";
 	// }
-	if (Vector.size() %2 != 0){
-		odd = true;
-		big.push_back(Vector.back());
-	}  
+	// if (Vector.size() %2 != 0){
+	// 	odd = true;
+	// 	big.push_back(Vector.back());
+	// }  
 	if (big.size() > 1)
 		big = alghorithm(big);
-	alghorithmSmall(big, small);
+	//alghorithmSmall(big, small);
 	// std::sort(big.begin(), big.end());
+	std::cout << " result  "  << " \n";
 	for(auto i= big.begin(); i != big.end(); ++i){
-		std::cout << " BIG  " << *i << " ";
+		std::cout  << *i << " ";
 	}
 	std::cout << "\n";
 	// for(auto i= small.begin(); i != small.end(); ++i){
