@@ -141,7 +141,7 @@ std::vector<int> algthjorithmforsmallpart(std::vector<int>& main, std::vector<in
 		int temp = start - end;
         while (temp != 0) {
 			end +=2;
-             std::cout << " insert " << small[start] << "\n";
+            //  std::cout << " insert " << small[start] << "\n";
             main = insertSmall(main, small[start], main.size() - 1);
 			start--;
             temp--;
@@ -165,7 +165,6 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         try {
             int num = std::stoi(argv[i]);
-			std::cout << num << "  VECTOR[i]";
             Vector.push_back(num);
         }
         catch (const std::exception& e) {
@@ -191,11 +190,10 @@ int main(int argc, char **argv) {
     for (size_t i = 1; i < Vector.size(); i += 2) {
         small.push_back(Vector[i]);
     }
-	std::cout << "CHECK"<<  "\n";
 
     // Apply the algorithm to the 'big' vector
-    // big = alghorithm(big, small);
-	// big = algthjorithmforsmallpart(big, small);
+    big = alghorithm(big, small);
+	big = algthjorithmforsmallpart(big, small);
     // std::cout << " result: \n";
     // for (auto i = big.begin(); i != big.end(); ++i) {
     //     std::cout << *i << " ";
