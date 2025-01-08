@@ -3,208 +3,166 @@
 #include <deque>
 #include <iostream>
 #include <algorithm>
+#include <chrono>
 
-void	PmergeMe::printVector(std::vector<int> vec) {
-	for (int nbr : vec) {
+template <typename Container>
+void	PmergeMe::printSequence(Container& x) {
+	for (int nbr : x) {
 		std::cout << " " << nbr << " ";
 	}
 	std::cout << std::endl;
 }
-
-PmergeMe::PmergeMe(const PmergeMe& copy){
-	this->Vector = copy.Vector;
+template <typename Container>
+PmergeMe::PmergeMe(Container& copy){
 	this->Deque = copy.Deque;
+	this->Vector = copy.Vector;
 }
-PmergeMe& PmergeMe::operator=(const PmergeMe& copy){
+template <typename Container>
+PmergeMe& PmergeMe::operator=(const Container& copy){
 	if (this != &copy){
 		this->Vector = copy.Vector;
-		this->Deque = copy.Deque;		
+		this->Vector = copy.Vector;		
 	}
 	return *this;
 }
-
-void PmergeMe::printVector(){
-	std::cout << "Vector" << std::endl;
-	for(auto i= Vector.begin(); i != Vector.end(); ++i){
-		std::cout << " " << *i << " ";
+template <typename Container>
+bool isAscending(Container& numbers) {
+	for (size_t i = 1; i < numbers.size(); ++i) {
+		if (numbers[i] <= numbers[i - 1]) {
+			std::cout << "Error: " << numbers[i - 1] << " >= " << numbers[i] << std::endl;
+			return false;
+		}
 	}
-	std::cout << std::endl;
+	return true;
 }
 
-void PmergeMe::printDeque(){
-	std::cout << "Deque" << std::endl;
-	for(auto i= Deque.begin(); i != Deque.end(); ++i){
-		std::cout << " " << *i << " ";
-	}
-	std::cout << std::endl;
-}
-bool insertNumber(std::vector<int>& temp, int x, int size) {
-    // Ensure the size is within bounds before attempting to erase
-    // if ((size_t)size >= temp.size()) {
-    //     return false;  // Prevent out-of-bounds access
-    // }
-
-    // Erase the element at 'size' (assumed to be a placeholder)
-    temp.erase(temp.begin() + size);
-
+template <typename Container>
+int PmergeMe::insertNumber(Container& temp, int x, int size, int num, int flag) {
+	if (flag == 0)
+    	temp.erase(temp.begin() + num);
     int low = 0;
-    int high = size - 1;
+    int high = size;
     int mid;
-
-    // Insert 'x' at the beginning if it's smaller than the first element
-    if (x < temp[0]) {
-        temp.insert(temp.begin(), x);
-    }
-    // Insert 'x' at the end of the sorted section if it's greater than the last element
-    else if (x > temp[size - 1]) {  // Change temp[size] to temp[size - 1]
-        temp.insert(temp.begin() + size, x);  // Insert at the new end of the sorted section
-        return true;
-    } 
-    // Binary search to find the correct position for 'x'
-    else {
         while (low <= high) {
             mid = low + (high - low) / 2;
-            if (x < temp[mid]) {
+            if (x < temp[mid])
                 high = mid - 1;
-            } else {
+            else
                 low = mid + 1;
-            }
         }
-        // Insert 'x' at the correct position found by binary search
         temp.insert(temp.begin() + low, x);
+    return low;
+}
+
+template <typename Container>
+Container& PmergeMe::alghorithm(Container& main, Container& small) {
+    std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
+    size_t j = 0;
+    while (j < jacobsthal.size()) {
+        size_t start = ((size_t)jacobsthal[j] < main.size()) ? jacobsthal[j] : main.size() - 1;
+        size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
+        if (start > main.size() - 1 || end > start) break;
+		int temp = start;
+        while (start > end) {
+            int position = insertNumber(main, main[temp], end, temp, 0);
+			if (start <= small.size() - 1){
+				int x = small[start];
+				small.erase(small.begin() + start);
+				small.insert(small.begin() + position, x);
+			}
+            end++;
+        }
+        j++;
     }
-
-    // Optional debug print (can be uncommented for debugging purposes)
-    // for (auto m = temp.begin(); m < (temp.begin() + size + 1); ++m) {
-    //     std::cout << " loop  " << *m << " ";
-    // }
-    // std::cout << "\n";
-
-    return false;
+    return main;
 }
 
-bool insertNumberS(std::vector<int>& temp, int x, int size) {
-	int low = 0;
-	int high = size - 1;
-	int mid;
-	if (x < temp[0]) {
-		temp.insert(temp.begin(), x);
-	}
-	else if (x > temp[size]) {
-		temp.insert(temp.begin() + size, x);
-		return true;
-	} else {
-		while (low <= high) { 
-			mid = low + (high - low) / 2;
-			if (x < temp[mid])
-				high = mid - 1;
-			else
-				low = mid + 1;
-		}
-		temp.insert(temp.begin() + low, x);
-	}
-	// for(auto m= temp.begin(); m < (temp.begin() + size + 1); ++m){
-	// 		std::cout << " loop  " << *m << " ";
-	// 	}
-	// 	std::cout << "\n";
-	return false;
-
-}
-std::vector<int> PmergeMe::alghorithm(std::vector<int>& main) {
+template <typename Container>
+Container& PmergeMe::algthjorithmforsmallpart(Container& main, Container& small) {
 	std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
-	size_t j = 0;
+	if (odd)
+		insertNumber(main, small[0], 1 , 0,  1);
+	else
+		main.insert(main.begin(), small[0]);
+    size_t j = 0;
 	while (j < jacobsthal.size()) {
-		size_t start = (static_cast<size_t>(jacobsthal[j]) < (main.size() - 1)) ? jacobsthal[j] : (main.size() - 1);
-		size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
-		std::cout << "Start: " << start << ", End: " << end << std::endl;
-		while (start > end) {
-			std::cout << " insert " << main[start] << "\n";
-			insertNumber(main, main[start], start);
+        size_t start = ((size_t)jacobsthal[j] < small.size()) ? jacobsthal[j] : small.size() - 1;
+        size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
+        if (start > main.size() - 1 || end >= start) break;
+		int temp = start - end;
+        end = start + end + 2;
+        while (temp != 0) {
+            insertNumber(main, small[start], end , 0,  1);
 			start--;
-		}
-		if (start >= main.size() - 1) break;
-		j++;
-	}
-	for(auto m= main.begin(); m != main.end(); ++m){
-		std::cout << " main  " << *m << " ";
-	}
-	std::cout << "\n";
-	return main;
-}
-std::vector<int> PmergeMe::alghorithmSmall(std::vector<int>& main, std::vector<int>& small) {
-	std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
-	insertNumber(main, small[0], 1);
-	size_t j = 0;
-	while (j < jacobsthal.size()) {
-		size_t start = (static_cast<size_t>(jacobsthal[j]) < (small.size() - 1)) ? jacobsthal[j] : (small.size() - 1);
-		size_t end = (j > 0) ? jacobsthal[j - 1] : 0;
-		std::cout << "Start: " << start << ", End: " << end << std::endl;
-		int i = start;
-		while (start > end) {
-			std::cout << " insert " << small[start] << "\n";
-			insertNumberS(main, small[start], i);
-			start--;
-		}
-		if (start >= small.size() - 1) break;
-		j++;
-	}
-	// for(auto m= main.begin(); m != main.end(); ++m){
-	// 	std::cout << " main  " << *m << " ";
-	// }
-	// std::cout << "\n";
-	return main;
+            temp--;
+			end++;
+        }
+        j++;
+    }
+    return main;
 }
 
-void PmergeMe::sortVector()
+void PmergeMe::sortContainer()
 {
-	std::vector<int> big;
-	std::vector<int> small;
+	std::chrono::time_point<std::chrono::high_resolution_clock> startVector = std::chrono::high_resolution_clock::now();
+	std::cout  << "\033[1;34mVector check:\033[0m" << std::endl;
+	std::cout  << "\033[1;32mBefore:\033[0m ";
+	printSequence(Vector);
+    std::vector<int> bigVector;
+    std::vector<int> smallVector;
+    for (size_t i = 0; i + 1 <= Vector.size(); i += 2) {
+		if (Vector.size()%2 != 0 && i == Vector.size() - 1){
+			bigVector.push_back(Vector[i]);
+			odd = true;
+		}
+		else {
+			bigVector.push_back((Vector[i] > Vector[i + 1]) ? Vector[i] : Vector[i + 1]);
+			smallVector.push_back((Vector[i] > Vector[i + 1]) ? Vector[i + 1] : Vector[i]);
+		}
+    }
+	if (Vector.size() > 1){
+		bigVector = alghorithm(bigVector, smallVector);
+		bigVector = algthjorithmforsmallpart(bigVector, smallVector);
+	}
+	std::chrono::time_point<std::chrono::high_resolution_clock> endVector = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double, std::micro> elapsedVector = endVector - startVector;
+	std::cout  << "After: ";
+	printSequence(bigVector);
+	std::cout << "Time to process a range of " << Vector.size() << " elements with std::vector is " << elapsedVector.count() << " us" << std::endl;
+	//std::cout  << std::boolalpha << isAscending(bigVector) << std::endl;
 
-	
-	if (Vector.size() == 0)
-		std::cout << "Error";
-	for (size_t i = 0; i+1 < Vector.size(); i+=2){
-		if (Vector[i] < Vector[i+1])
-			std::swap(Vector[i], Vector[i+1]);
+	std::chrono::time_point<std::chrono::high_resolution_clock> startDeque = std::chrono::high_resolution_clock::now();
+	std::cout  << "\033[1;34mDeque check:\033[0m" << std::endl;
+	// std::cout  << "Before: ";
+	// printSequence(this->Deque);
+    std::deque<int> bigDeque;
+    std::deque<int> smallDeque;
+    for (size_t i = 0; i + 1 <= Deque.size(); i += 2) {
+		if (Deque.size()%2 != 0 && i == Deque.size() - 1){
+			bigDeque.push_back(Deque[i]);
+			odd = true;
+		}
+		else {
+			if (Deque[i] > Deque[i + 1]) {
+				bigDeque.push_back(Deque[i]);
+				smallDeque.push_back(Deque[i + 1]);
+			} else {
+				bigDeque.push_back(Deque[i + 1]);
+				smallDeque.push_back(Deque[i]);
+			}
+		}
+    }
+	if (Deque.size() > 1){
+		bigDeque = alghorithm(bigDeque, smallDeque);
+		bigDeque = algthjorithmforsmallpart(bigDeque, smallDeque);
 	}
-	for (size_t i = 0; i+1 < Vector.size(); i+=2){
-		big.push_back(Vector[i]);
-	}
-	for (size_t i = 1; i < Vector.size(); i+=2){
-		small.push_back(Vector[i]);
-	}
-	// for(auto i= big.begin(); i != big.end(); ++i){
-	// 	std::cout  << *i << " ";
-	// }
-	// if (Vector.size() %2 != 0){
-	// 	odd = true;
-	// 	big.push_back(Vector.back());
-	// }  
-	if (big.size() > 1)
-		big = alghorithm(big);
-	//alghorithmSmall(big, small);
-	// std::sort(big.begin(), big.end());
-	std::cout << " result  "  << " \n";
-	for(auto i= big.begin(); i != big.end(); ++i){
-		std::cout  << *i << " ";
-	}
-	std::cout << "\n";
-	// for(auto i= small.begin(); i != small.end(); ++i){
-	// 	std::cout << " SMALL  " << *i << " ";
-	// }
-	std::cout << "\n";
-	// alghorithmSmall(big, small);
+	std::chrono::time_point<std::chrono::high_resolution_clock> endDeque = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double, std::micro>  elapsedDeque = endDeque - startDeque;
+	std::cout  << "After: ";
+	printSequence(bigDeque);
+	std::cout << "Time to process a range of " << Deque.size() << " elements with std::deque is "  << elapsedDeque.count() << " us" << std::endl;
+	//std::cout  << std::boolalpha << isAscending(bigDeque) << std::endl;
+	std::cout  << std::endl;
 
-	
-	// std::cout << "\n";
-	// std::cout << "\n\n";
-	// std::cout << std::endl;
-	// alghorithm(big, small);
 }
 
-void PmergeMe::sortDeque()
-{
-	// printDeque();
-
-	
-}

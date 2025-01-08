@@ -2,29 +2,35 @@
 #include <vector>
 #include <deque>
 
-
 class PmergeMe {
     private:
         std::vector<int> Vector;
         std::deque<int> Deque;
+		bool odd;
     public:
-		bool odd = false;
         PmergeMe() = default;
         ~PmergeMe() = default;
-        PmergeMe(const PmergeMe& copy);
-        PmergeMe& operator=(const PmergeMe& copy);
-        std::vector<int>& getVector(){return Vector;}
-        std::deque<int>& getDeque(){return Deque;}
+
+		template <typename Container>
+        PmergeMe(Container& copy);
+
+		template <typename Container>
+        PmergeMe& operator=(const Container& copy);
+
         void addToVector(int num){Vector.push_back(num);}
         void addToDeque(int num){Deque.push_back(num);}
-        void sortDeque();
-        void sortVector();
-		std::vector<int> mergeInsertionVector(std::vector<int>& big);
-		std::vector<int> alghorithm(std::vector<int>& main);
-        std::vector<int> alghorithmSmall(std::vector<int>& main, std::vector<int>& small);
-		void printVector(std::vector<int> vec);
+		void sortContainer();
 
+		template <typename Container>
+		int insertNumber(Container& temp, int x, int size, int num, int flag);
 
-        void printDeque();
-        void printVector();
+		template <typename Container>
+		Container& alghorithm(Container& main, Container& small);
+
+		template <typename Container>
+		Container& algthjorithmforsmallpart(Container& main, Container& small);
+
+		template <typename Container>
+		void	printSequence(Container& x);
+
 };

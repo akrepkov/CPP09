@@ -3,7 +3,7 @@
 #include <vector>
 #include <deque>
 #include <sstream>
-
+#include <exception> 
 
 bool isIntegerString(const std::string& str) {
     for (size_t i = 0; i < str.length(); ++i) {
@@ -20,28 +20,29 @@ check for doubles
 Check for empty str
 1 number
 2 numbers str
+`shuf -i 1-100000 -n 3000 | tr "\n" " "`
 */
 int main(int argc, char **argv){
-    if (argc == 2){
-       PmergeMe VectorSort;
-       PmergeMe DequeSort;
-       //check if it's valid and has numbers
-       std::stringstream ss(argv[1]);
-       std::string token;
-       while(ss >> token){
-            if (isIntegerString(token)){ 
-                int num = stoi(token);
-                VectorSort.addToVector(num);
-                DequeSort.addToDeque(num);
-            }
-       }
-        VectorSort.sortVector();
-        DequeSort.sortDeque();       
-    }
-    else
-        std::cout << "Error" << std::endl; //add exceptions
-    //check doubles
-    return 0;
+	PmergeMe SequenceSort;
+	std::string token;
+	try {
+		for (int i = 1; i < argc; ++i) {
+		std::string token = argv[i];
+		if (isIntegerString(token)) {
+			int num = std::stoi(token);
+			SequenceSort.addToVector(num);
+			SequenceSort.addToDeque(num);
+		} else {
+			std::cerr << "Error: Invalid format for token: " << token << std::endl;
+			return 1;
+		}
+	}
+	SequenceSort.sortContainer();    
+	}
+	catch(const std::exception& e){
+		std::cerr << "Error " << e.what() << std::endl; //add exceptions
+	}
+return 0;
 }
 
 /*

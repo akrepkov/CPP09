@@ -194,11 +194,11 @@ int main(int argc, char **argv) {
     // Apply the algorithm to the 'big' vector
     big = alghorithm(big, small);
 	big = algthjorithmforsmallpart(big, small);
-    // std::cout << " result: \n";
-    // for (auto i = big.begin(); i != big.end(); ++i) {
-    //     std::cout << *i << " ";
-    // }
-    // std::cout << "\n";
+    std::cout << " result: \n";
+    for (auto i = big.begin(); i != big.end(); ++i) {
+        std::cout << *i << " ";
+    }
+    std::cout << "\n";
 	std::cout  << std::boolalpha << isAscending(big) << std::endl;
     return 0;
 }
