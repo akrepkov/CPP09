@@ -54,7 +54,7 @@ bool BitcoinExchange::extractDate(std::string date){
 	std::tm now = nowCheck();
 	std::stringstream ss(date);
 	ss >> std::get_time(&tm, "%Y-%m-%d");
-//    std::cout << "GIVEN DATE " << tm.tm_mday << "  " << tm.tm_mon + 1  << "  " << tm.tm_year + 1900 << std::endl;
+    // std::cout << "GIVEN DATE " << tm.tm_mday << "  " << tm.tm_mon + 1  << "  " << tm.tm_year + 1900 << std::endl;
 	if (ss.fail() || !validDate(tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900) \
 		|| (std::difftime(std::mktime(&tm), std::mktime(&now)) > 0)){
 		std::cout << "ERROR: Invalid date values for " << date << std::endl;
