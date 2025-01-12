@@ -84,6 +84,9 @@ void BitcoinExchange::setData(std::string date, float rate){
 		data[date] = rate;
 }
 
+// std::string BitcoinExchange::getDate(std::map<std::string, float> data){
+// 	return data[rate];
+// }
 
 std::map<std::string, float> BitcoinExchange::getData(){
 	return this->data;
