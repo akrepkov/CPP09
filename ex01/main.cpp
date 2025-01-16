@@ -1,4 +1,4 @@
-#include "RPN.cpp"
+#include "RPN.hpp"
 
 // void printStack(std::stack<int> stack) {
 //     std::cout << "Result: ";
@@ -19,10 +19,12 @@ int main(int argc, char* argv[]){
         notation.extractInput(argv[1]);
     }
     else
-        std::cout << "0" << std::endl;
+        std::cerr << "Error" << std::endl;
     return 0;
 }
-
 /*
-add exceptions, cases for operators, Makefile
+Stack 
+
+The essence of evaluating an RPN expression revolves around pushing numbers onto the stack and popping two numbers off the stack when encountering an operator.
+
 */

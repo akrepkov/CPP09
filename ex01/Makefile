@@ -1,13 +1,13 @@
 
-SRC = main.cpp Span.cpp
+SRC = main.cpp RPN.cpp
 OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.cpp=%.o))
 CC = c++
 RM = rm -f
-CPPFLAGS = -Wall -Wextra -Werror
-HEADER = Span.hpp
+CPPFLAGS = -Wall -Wextra -Werror 
+HEADER = RPN.hpp
 
-NAME = span
+NAME = RPN
 
 all: $(NAME)
 

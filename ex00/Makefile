@@ -4,7 +4,7 @@ OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.cpp=%.o))
 CC = c++
 RM = rm -f
-CPPFLAGS = -Wall -Wextra -Werror 
+CPPFLAGS = -Wall -Wextra -Werror
 HEADER = BitcoinExchange.hpp
 
 NAME = btc

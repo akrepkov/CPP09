@@ -7,7 +7,7 @@ RM = rm -f
 CPPFLAGS = -Wall -Wextra -Werror
 HEADER = PmergeMe.hpp
 
-NAME = pmergeMe
+NAME = PmergeMe
 
 all: $(NAME)
 

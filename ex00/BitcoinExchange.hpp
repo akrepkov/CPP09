@@ -20,11 +20,10 @@ class BitcoinExchange{
 		void setData(std::string date, float rate);
 		bool extractDate(std::string date);
 		void findDate(std::string line);
-		// std::string getDate(std::map<std::string, float> data);
-
 		void parsingInput(std::string line, BitcoinExchange& Exchange, char del);
 		void findClosest(std::string date, int value);
 
 };
 
 #endif
+

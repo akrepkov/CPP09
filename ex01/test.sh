@@ -1,22 +1,55 @@
 #!/bin/bash
 
-./a.out "1 2 * 5 - 2 +"
-echo "Should be -1"
-./a.out "1 1 * 1 - 1 +"
-echo "Should be 1"
-./a.out "5 1 2 + 4 * + 3 -"
-echo "Should be 14"
-./a.out "5 6 2 + * 3 1 / -" 
-echo "Should be 37"
-./a.out "8 9 * 9 - 9 - 9 - 4 - 1 +" 
-echo "Should be 42"
-./a.out "7 7 * 7 -" 
-echo "Should be 42"
-./a.out "77 * 7 -" 
-echo "Should fail"
-./a.out "3 3 3 + +" 
-echo "Should be 9"
-./a.out "+ 8" 
-echo "Should fail"
-./a.out "7 3" 
-echo "Should fail"
+./RPN "3 +"
+echo -e "Should be Error: Not enough arguments before operator\n"
+
+./RPN "+"
+echo -e "Should be Error: Not enough arguments before operator\n"
+
+./RPN "3 4 +"
+echo -e "Should be 7\n"
+
+./RPN "3 4 5 +"
+echo -e "Should be Error: Invalid input\n"
+
+./RPN "3 0 /"
+echo -e "Should be Error: Division by zero\n"
+
+./RPN "3 4 &"
+echo -e "Should be Error: Invalid operator\n"
+
+./RPN "3 5 -"
+echo -e "Should be -2\n"
+
+./RPN "7 10 -"
+echo -e "Should be Error: Invalid input\n"
+
+./RPN "3 4 2 * +"
+echo -e "Should be 11\n"
+
+./RPN "10 5 2 / +"
+echo -e "Should be Error: Invalid input\n"
+
+./RPN ""
+echo -e "Should be Error: Invalid input\n"
+
+./RPN "3"
+echo -e "Should be 3\n"
+
+./RPN "3 5 2 * + 6 2 / +"
+echo -e "Should be 16\n"
+
+./RPN "2 3 + 5 * 7 +"
+echo -e "Should be 32\n"
+
+./RPN "3 a +"
+echo -e "Should be Error: Invalid input\n"
+
+./RPN "3 4 + a"
+echo -e "Should be Error: Invalid input\n"
+
+./RPN "8 2 *"
+echo -e "Should be 16\n"
+
+./RPN "1 2 * 2 / 2 + 5 * 6 - 1 3 * - 4 5 * * 8 /"
+echo -e "Should be 10\n"

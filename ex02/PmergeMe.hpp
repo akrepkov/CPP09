@@ -6,16 +6,15 @@ class PmergeMe {
     private:
         std::vector<int> Vector;
         std::deque<int> Deque;
-		bool odd;
+		bool odd = false;
+		int oddNum;
     public:
         PmergeMe() = default;
         ~PmergeMe() = default;
 
-		template <typename Container>
-        PmergeMe(Container& copy);
+        PmergeMe(PmergeMe& copy);
 
-		template <typename Container>
-        PmergeMe& operator=(const Container& copy);
+        PmergeMe& operator=(const PmergeMe& copy);
 
         void addToVector(int num){Vector.push_back(num);}
         void addToDeque(int num){Deque.push_back(num);}

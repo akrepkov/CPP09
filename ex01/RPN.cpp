@@ -3,6 +3,8 @@
 #include <iostream>
 #include <sstream>
 
+RPN::RPN(){};
+RPN::~RPN(){};
 RPN& RPN::operator=(const RPN& copy){
     if (this == &copy) {
         return *this;
@@ -18,12 +20,17 @@ void RPN::extractInput(std::string data){
     std::stringstream ss(data);
     std::string token;
     while(ss >> token){
-        //std::cout << "Token : " << token << " size " <<numbers.size() << std::endl;
+		if (token.length() > 1){
+			std::cerr << "Error: More than 1 digit" << std::endl;
+            return ;
+        }
+		if (isalpha(token[0])){
+			std::cerr << "Error: Wrong character" << std::endl;
+            return ;
+        }
         if (isdigit(token[0]))
             numbers.push(stoi(token));
         else if (token == "+" || token == "-" || token == "*" || token == "/"){
-            if (token == "neg")
-                token = "-";
             if (numbers.size() < 2) {
                 std::cerr << "Error: Not enough arguments before operator" << std::endl;
                 return ;
@@ -49,7 +56,7 @@ void RPN::extractInput(std::string data){
     }
     //printStack(numbers);
     if (numbers.size() == 1)
-        std::cout << "Result: " << numbers.top() << std::endl;
+        std::cout << "\033[1;32mResult: " << numbers.top() << "\033[0m" << std::endl;
     else {
         std::cerr << "Error: Invalid input" << std::endl;
         return ;
